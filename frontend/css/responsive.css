@@ -1,0 +1,60 @@
+/* ==========================================================================
+   NEXORA AI - Responsive Layout Stylesheet
+   ========================================================================== */
+
+@media (max-width: 1200px) {
+    :root {
+        --robot-panel-width: 35%;
+    }
+}
+
+@media (max-width: 850px) {
+    #app-root {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .views-wrapper {
+        flex-direction: column;
+    }
+
+    .robot-sidebar-pane {
+        width: 100%;
+        min-width: 0;
+        height: 320px;
+        order: -1;
+        border-left: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .center-studio-pane {
+        height: calc(100vh - 64px - 320px);
+    }
+}
+
+@media (max-width: 768px) {
+    .feature-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .chat-bubble {
+        max-width: 90%;
+    }
+
+    .welcome-hero h1 {
+        font-size: 1.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .feature-cards-grid {
+        grid-template-columns: 1fr;
+    }
+}
+

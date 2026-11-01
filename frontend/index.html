@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXORA AI | One Intelligence. Infinite Possibilities.</title>
+    
+    <!-- CSS Stylesheets -->
+    <link rel="stylesheet" href="css/highlight-dark.css?v=2.2">
+    <link rel="stylesheet" href="css/style.css?v=2.2">
+    <link rel="stylesheet" href="css/components.css?v=2.2">
+    <link rel="stylesheet" href="css/responsive.css?v=2.2">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+    <!-- HLS Video Player Library -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+</head>
+<body data-theme="dark">
+
+    <div id="app-root">
+        <!-- ================= LEFT: NAVIGATION SIDEBAR ================= -->
+        <aside class="sidebar" id="main-sidebar">
+            <div class="sidebar-header">
+                <a href="#" class="brand-badge" onclick="window.nexoraApp.switchView('chat-studio')">
+                    <div class="brand-logo-icon">N</div>
+                    <div class="brand-text-wrap">
+                        <span class="brand-name">NEXORA AI</span>
+                        <span class="brand-tagline">One Intelligence. Infinite Possibilities.</span>
+                    </div>
+                </a>
+                <button class="btn-sidebar-toggle" id="sidebar-toggle-btn" title="Toggle Sidebar">☰</button>
+            </div>
+
+            <div class="new-chat-wrapper">
+                <button class="btn-new-chat" id="new-chat-btn">
+                    <span>➕</span>
+                    <span class="nav-text">New Chat</span>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-link active" data-view="chat-studio">
+                    <span class="nav-icon">💬</span>
+                    <span class="nav-text">Chat Studio</span>
+                </a>
+                <a href="#" class="nav-link" data-view="image-studio">
+                    <span class="nav-icon">🎨</span>
+                    <span class="nav-text">Image Generator</span>
+                </a>
+                <a href="#" class="nav-link" data-view="video-studio">
+                    <span class="nav-icon">🎬</span>
+                    <span class="nav-text">Video Generator</span>
+                </a>
+                <a href="#" class="nav-link" data-view="media-gallery">
+                    <span class="nav-icon">🖼️</span>
+                    <span class="nav-text">Generated Media</span>
+                </a>
+                <a href="#" class="nav-link" data-view="explore-models">
+                    <span class="nav-icon">🧠</span>
+                    <span class="nav-text">Explore Models</span>
+                </a>
+                <a href="#" class="nav-link" data-view="reports">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-text">Activity Reports</span>
+                </a>
+            </nav>
+
+            <div class="history-section">
+                <div class="history-heading">Conversations</div>
+                <div class="history-search-wrap">
+                    <input type="text" id="history-search-input" class="history-search-input" placeholder="🔍 Search chats...">
+                </div>
+                <div id="chat-history-list"></div>
+            </div>
+
+            <div class="sidebar-footer">
+                <a href="#" class="nav-link" id="nav-settings-btn">
+                    <span class="nav-icon">⚙️</span>
+                    <span class="nav-text">Settings</span>
+                </a>
+                <a href="#" class="nav-link" id="nav-help-btn">
+                    <span class="nav-icon">❓</span>
+                    <span class="nav-text">Help & Support</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- ================= CENTER: MAIN WORKSPACE ================= -->
+        <main class="main-workspace">
+            <!-- Top Navbar -->
+            <header class="top-navbar">
+                <div class="model-selector-wrap">
+                    <select class="model-dropdown" id="model-selector">
+                        <option value="gemini-flash-lite-latest" selected>Gemini Flash Lite (Recommended)</option>
+                        <option value="gemini-3.5-flash">Gemini 3.5 Flash</option>
+                        <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+                        <option value="pollinations-flux">Flux.1 Generative Studio</option>
+                        <option value="nexora-motion-engine">Nexora Motion Engine</option>
+                        <option value="hf-mistral-7b">Mistral 7B Instruct</option>
+                    </select>
+                    <span class="status-pill status-idle" id="robot-status-pill">IDLE</span>
+                </div>
+
+                <div class="navbar-actions">
+                    <button class="theme-btn" id="theme-toggle-btn" title="Toggle Dark/Light Mode">
+                        <span id="theme-toggle-icon">☀️</span>
+                    </button>
+                </div>
+            </header>
+
+            <div class="views-wrapper">
+                <!-- VIEW 1: CHAT STUDIO -->
+                <section class="center-studio-pane app-view" id="view-chat-studio">
+                    <!-- Empty State Welcome Banner -->
+                    <div id="empty-chat-state">
+                        <div class="welcome-hero">
+                            <h1>Hello! Welcome to Nexora AI.</h1>
+                            <p>Your intelligent creative companion. Ask, explore, imagine and create anything.</p>
+                        </div>
+
+                        <!-- 8 Actionable Feature Cards -->
+                        <div class="feature-cards-grid">
+                            <div class="feature-card" data-action="ask-anything">
+                                <span class="feature-card-icon">💡</span>
+                                <span class="feature-card-title">Ask Anything</span>
+                                <span class="feature-card-sub">General reasoning & knowledge</span>
+                            </div>
+                            <div class="feature-card" data-action="analyze-image">
+                                <span class="feature-card-icon">🖼️</span>
+                                <span class="feature-card-title">Analyze an Image</span>
+                                <span class="feature-card-sub">Visual OCR & scene understanding</span>
+                            </div>
+                            <div class="feature-card" data-action="chat-pdf">
+                                <span class="feature-card-icon">📄</span>
+                                <span class="feature-card-title">Chat With PDF</span>
+                                <span class="feature-card-sub">Document Q&A & table analysis</span>
+                            </div>
+                            <div class="feature-card" data-action="generate-image">
+                                <span class="feature-card-icon">🎨</span>
+                                <span class="feature-card-title">Generate an Image</span>
+                                <span class="feature-card-sub">Flux.1 photorealistic art</span>
+                            </div>
+                            <div class="feature-card" data-action="create-video">
+                                <span class="feature-card-icon">🎬</span>
+                                <span class="feature-card-title">Create a Video</span>
+                                <span class="feature-card-sub">Cinematic AI motion sequences</span>
+                            </div>
+                            <div class="feature-card" data-action="write-code">
+                                <span class="feature-card-icon">💻</span>
+                                <span class="feature-card-title">Write Code</span>
+                                <span class="feature-card-sub">Python, Web, C++, Algorithms</span>
+                            </div>
+                            <div class="feature-card" data-action="analyze-audio">
+                                <span class="feature-card-icon">🎙️</span>
+                                <span class="feature-card-title">Analyze Audio</span>
+                                <span class="feature-card-sub">Speech-to-text & audio insights</span>
+                            </div>
+                            <div class="feature-card" data-action="summarize-documents">
+                                <span class="feature-card-icon">📑</span>
+                                <span class="feature-card-title">Summarize Documents</span>
+                                <span class="feature-card-sub">Executive summaries & notes</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Messages List -->
+                    <div class="chat-messages-container" id="chat-messages"></div>
+
+                    <!-- Multimodal Chat Input Dock -->
+                    <div class="input-dock">
+                        <div class="input-box-wrapper" id="chat-input-wrapper">
+                            <!-- Staged Attachment Previews -->
+                            <div class="attachment-preview-bar" id="attachment-preview-bar"></div>
+
+                            <textarea 
+                                class="input-textarea" 
+                                id="chat-input" 
+                                placeholder="Ask Nexora anything, upload images, documents, audio or record your voice..." 
+                                rows="1"
+                            ></textarea>
+
+                            <div class="input-actions-bar">
+                                <div class="input-left-tools">
+                                    <!-- Universal Hidden File Input -->
+                                    <input type="file" id="universal-file-input" multiple style="display: none;">
+
+                                    <!-- Attach Menu Trigger -->
+                                    <button class="tool-icon-btn" id="attach-menu-btn" title="Attach file">📎</button>
+
+                                    <!-- Attach Dropdown -->
+                                    <div class="attach-menu-dropdown" id="attach-dropdown">
+                                        <div class="attach-menu-item" data-accept="image/*">
+                                            <span>🖼️</span><span>Upload Image</span>
+                                        </div>
+                                        <div class="attach-menu-item" data-accept=".pdf,.docx,.doc,.txt,.csv">
+                                            <span>📄</span><span>Upload Document (PDF/DOCX)</span>
+                                        </div>
+                                        <div class="attach-menu-item" data-accept="audio/*">
+                                            <span>🎙️</span><span>Upload Audio Track</span>
+                                        </div>
+                                        <div class="attach-menu-item" data-accept="video/*">
+                                            <span>🎬</span><span>Upload Video File</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Voice Recording Mic Button -->
+                                    <button class="tool-icon-btn" id="mic-btn" title="Voice Input">🎤</button>
+                                    <span id="voice-recording-indicator" style="display: none; font-size: 0.78rem; color: #ef4444; font-weight: 600;">Listening...</span>
+                                </div>
+
+                                <div class="input-right-tools">
+                                    <button class="btn-stop" id="stop-btn" title="Stop generation">⏹️</button>
+                                    <button class="btn-send" id="send-btn" title="Send message">⚡</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW 2: IMAGE STUDIO -->
+                <section class="center-studio-pane app-view" id="view-image-studio" style="display: none;">
+                    <div class="studio-container">
+                        <div class="studio-header">
+                            <h2 class="studio-title">🎨 AI Image Studio</h2>
+                            <p class="studio-subtitle">Synthesize photorealistic concept art, portraits, and digital illustrations with Flux.1.</p>
+                        </div>
+
+                        <div class="studio-panel">
+                            <div class="form-group">
+                                <label class="form-label">Image Prompt</label>
+                                <textarea class="studio-textarea" id="img-studio-prompt" placeholder="A futuristic humanoid robot exploring a cyberpunk neon metropolis at night, highly detailed, 8k..."></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Artistic Style</label>
+                                <div class="style-selector-grid">
+                                    <div class="style-option-card active" data-style="photorealistic">Photorealistic</div>
+                                    <div class="style-option-card" data-style="cinematic">Cinematic</div>
+                                    <div class="style-option-card" data-style="anime">Anime</div>
+                                    <div class="style-option-card" data-style="cartoon">Cartoon 3D</div>
+                                    <div class="style-option-card" data-style="3d">3D Octane</div>
+                                    <div class="style-option-card" data-style="digital art">Digital Art</div>
+                                    <div class="style-option-card" data-style="watercolor">Watercolor</div>
+                                    <div class="style-option-card" data-style="fantasy">Epic Fantasy</div>
+                                    <div class="style-option-card" data-style="minimalist">Minimalist</div>
+                                    <div class="style-option-card" data-style="professional photography">Studio Photo</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Aspect Ratio</label>
+                                <div class="ratio-pills-row">
+                                    <div class="ratio-pill active" data-ratio="1:1">1:1 Square (1024x1024)</div>
+                                    <div class="ratio-pill" data-ratio="16:9">16:9 Landscape (1280x720)</div>
+                                    <div class="ratio-pill" data-ratio="9:16">9:16 Portrait (720x1280)</div>
+                                    <div class="ratio-pill" data-ratio="4:3">4:3 Standard (1024x768)</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Generation Quantity (Multi-Image Batch)</label>
+                                <div class="ratio-pills-row" id="img-quantity-pills">
+                                    <div class="ratio-pill img-qty-pill active" data-qty="1">1 Image</div>
+                                    <div class="ratio-pill img-qty-pill" data-qty="2">2 Variations</div>
+                                    <div class="ratio-pill img-qty-pill" data-qty="3">3 Variations</div>
+                                    <div class="ratio-pill img-qty-pill" data-qty="4">4 Variations</div>
+                                </div>
+                            </div>
+
+                            <button class="btn-primary-gradient" id="img-studio-generate-btn">
+                                <span>✨ Generate Artwork</span>
+                            </button>
+                        </div>
+
+                        <div class="results-grid" id="img-studio-results-grid"></div>
+                    </div>
+                </section>
+
+                <!-- VIEW 3: VIDEO STUDIO -->
+                <section class="center-studio-pane app-view" id="view-video-studio" style="display: none;">
+                    <div class="studio-container">
+                        <div class="studio-header">
+                            <h2 class="studio-title">🎬 AI Video Studio</h2>
+                            <p class="studio-subtitle">Synthesize animated cinematic motion sequences and camera pans with Nexora Motion Engine.</p>
+                        </div>
+
+                        <div class="studio-panel">
+                            <div class="form-group">
+                                <label class="form-label">Video Scene Prompt</label>
+                                <textarea class="studio-textarea" id="vid-studio-prompt" placeholder="Cinematic camera zoom into a futuristic quantum supercomputer pulsing with blue energy..."></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Optional Reference Image (Image-to-Video Animation)</label>
+                                <div style="display: flex; gap: 10px; align-items: center;">
+                                    <input type="text" class="studio-textarea" style="min-height: 40px; flex: 1;" id="vid-studio-image-url" placeholder="Paste image URL or click upload to animate a reference image...">
+                                    <label for="vid-ref-file-input" class="btn btn-sm" style="padding: 10px 16px; background: rgba(0,242,254,0.15); border: 1px solid var(--accent-cyan); color: var(--accent-cyan); border-radius: var(--radius-sm); cursor: pointer; white-space: nowrap;">
+                                        📁 Upload Image
+                                    </label>
+                                    <input type="file" id="vid-ref-file-input" accept="image/*" style="display: none;">
+                                </div>
+                                <div id="vid-ref-preview" style="display: none; margin-top: 8px; align-items: center; gap: 10px;">
+                                    <img id="vid-ref-preview-img" style="height: 48px; border-radius: 4px; border: 1px solid var(--border-color);">
+                                    <span id="vid-ref-preview-name" style="font-size: 0.8rem; color: var(--text-secondary);"></span>
+                                    <button type="button" id="vid-ref-clear-btn" style="background: none; border: none; color: #ef4444; cursor: pointer; font-size: 0.82rem;">✕ Remove</button>
+                                </div>
+                            </div>
+
+                            <div style="display: flex; gap: 16px; margin-bottom: 20px;">
+                                <div style="flex: 1;">
+                                    <label class="form-label">Motion Style</label>
+                                    <select class="model-dropdown" id="vid-studio-style" style="width: 100%;">
+                                        <option value="cinematic">Cinematic Zoom & Pan</option>
+                                        <option value="realistic">Natural Atmospheric Motion</option>
+                                        <option value="animated">Futuristic Sci-Fi Pulse</option>
+                                    </select>
+                                </div>
+                                <div style="flex: 1;">
+                                    <label class="form-label">Aspect Ratio</label>
+                                    <select class="model-dropdown" id="vid-studio-ratio" style="width: 100%;">
+                                        <option value="16:9">16:9 Widescreen (1280x720)</option>
+                                        <option value="9:16">9:16 Vertical Reel (720x1280)</option>
+                                        <option value="1:1">1:1 Square (720x720)</option>
+                                    </select>
+                                </div>
+                                <div style="width: 130px;">
+                                    <label class="form-label">Duration</label>
+                                    <select class="model-dropdown" id="vid-studio-duration" style="width: 100%;">
+                                        <option value="3">3 Seconds</option>
+                                        <option value="5" selected>5 Seconds</option>
+                                        <option value="10">10 Seconds</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <button class="btn-primary-gradient" id="vid-studio-generate-btn">
+                                <span>🎬 Generate Video</span>
+                            </button>
+                        </div>
+
+                        <!-- Active Job Progress Card -->
+                        <div class="job-status-card" id="vid-studio-job-status" style="display: none;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <strong>Active Video Render Job</strong>
+                                <span class="status-badge badge-processing" id="vid-job-status-badge">PROCESSING</span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar-fill" id="vid-job-progress-bar"></div>
+                            </div>
+                            <div style="font-size: 0.8rem; color: var(--text-secondary);" id="vid-job-progress-text">Rendering frames...</div>
+                        </div>
+
+                        <div id="vid-studio-results-grid"></div>
+                    </div>
+                </section>
+
+                <!-- VIEW 4: MEDIA GALLERY -->
+                <section class="center-studio-pane app-view" id="view-media-gallery" style="display: none;">
+                    <div class="studio-container">
+                        <div class="studio-header">
+                            <h2 class="studio-title">🖼️ Media Gallery</h2>
+                            <p class="studio-subtitle">Browse, download, and manage your AI-generated images, videos, and uploaded files.</p>
+                        </div>
+
+                        <div style="display: flex; gap: 10px; margin-bottom: 24px;">
+                            <div class="ratio-pill gallery-filter-pill active" data-filter="all">All Media</div>
+                            <div class="ratio-pill gallery-filter-pill" data-filter="image">Generated Images</div>
+                            <div class="ratio-pill gallery-filter-pill" data-filter="video">Generated Videos</div>
+                            <div class="ratio-pill gallery-filter-pill" data-filter="document">Uploaded Documents</div>
+                        </div>
+
+                        <div class="results-grid" id="gallery-items-grid"></div>
+                    </div>
+                </section>
+
+                <!-- VIEW 5: EXPLORE MODELS -->
+                <section class="center-studio-pane app-view" id="view-explore-models" style="display: none;">
+                    <div class="studio-container">
+                        <div class="studio-header">
+                            <h2 class="studio-title">🧠 Integrated AI Model Catalog</h2>
+                            <p class="studio-subtitle">Modular task-based AI routing across conversational, vision, audio, image, and motion models.</p>
+                        </div>
+
+                        <div class="results-grid" id="models-grid-container"></div>
+                    </div>
+                </section>
+
+                <!-- VIEW 6: ACTIVITY REPORTS -->
+                <section class="center-studio-pane app-view" id="view-reports" style="display: none;">
+                    <div class="studio-container">
+                        <div class="studio-header" style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 14px;">
+                            <div>
+                                <h2 class="studio-title">📊 Platform Activity & Reports</h2>
+                                <p class="studio-subtitle">Real usage statistics, model performance metrics, and database activity streams.</p>
+                            </div>
+                            <div style="display: flex; gap: 10px;">
+                                <button class="btn btn-sm btn-outline" id="reports-refresh-btn" style="padding: 9px 16px; border-radius: var(--radius-sm); background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-primary); cursor: pointer; font-weight: 600;">
+                                    🔄 Refresh Data
+                                </button>
+                                <button class="btn btn-sm btn-primary" id="reports-export-csv-btn" style="padding: 9px 16px; border-radius: var(--radius-sm); background: var(--accent-gradient); color: #fff; border: none; cursor: pointer; font-weight: 600;">
+                                    📥 Export to CSV
+                                </button>
+                            </div>
+                        </div>
+                        <div id="reports-container"></div>
+                    </div>
+                </section>
+
+                <!-- ================= RIGHT: 3D ROBOT ASSISTANT ================= -->
+                <aside class="robot-sidebar-pane">
+                    <!-- Speech Bubble above robot -->
+                    <div class="robot-dialogue-bubble" id="robot-speech-bubble">
+                        Hello! I am your Nexora AI assistant.
+                    </div>
+
+                    <!-- WebGL Canvas Mount Container -->
+                    <div id="robot-canvas-container"></div>
+
+                    <!-- Overlay Badge -->
+                    <div class="robot-badge-overlay">
+                        <span style="color: var(--accent-cyan); font-weight: 700;">NEXORA 3D</span>
+                        <span>•</span>
+                        <span>Interactive WebGL</span>
+                    </div>
+                </aside>
+            </div>
+        </main>
+    </div>
+
+    <!-- SETTINGS MODAL -->
+    <div class="modal-backdrop" id="settings-modal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 class="modal-title">⚙️ Platform Settings</h3>
+                <button class="modal-close-btn" id="close-settings-btn">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Google Gemini API Key</label>
+                    <input type="password" class="studio-textarea" style="min-height: 42px;" id="setting-gemini-key" placeholder="AIzaSy...">
+                    <small style="color: var(--text-muted); font-size: 0.78rem; display: block; margin-top: 4px;">
+                        Status: <span id="gemini-status-indicator" class="text-warning">Checking...</span> | 
+                        <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: var(--accent-cyan);">Get free Gemini key</a>
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Hugging Face API Key (Optional)</label>
+                    <input type="password" class="studio-textarea" style="min-height: 42px;" id="setting-hf-key" placeholder="hf_...">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Text-to-Speech Voice</label>
+                    <select class="model-dropdown" id="setting-voice-select" style="width: 100%;">
+                        <option>Default System Voice</option>
+                    </select>
+                </div>
+
+                <div style="display: flex; gap: 16px; margin-bottom: 18px;">
+                    <div style="flex: 1;">
+                        <label class="form-label">Voice Volume (<span id="setting-voice-volume-val">100%</span>)</label>
+                        <input type="range" id="setting-voice-volume" min="0" max="1" step="0.05" value="1" style="width: 100%; accent-color: var(--accent-cyan); cursor: pointer;">
+                    </div>
+                    <div style="width: 140px;">
+                        <label class="form-label">Playback Speed</label>
+                        <select class="model-dropdown" id="setting-voice-rate" style="width: 100%;">
+                            <option value="0.75">0.75x Slower</option>
+                            <option value="1.0" selected>1.0x Normal</option>
+                            <option value="1.25">1.25x Faster</option>
+                            <option value="1.5">1.5x Fast</option>
+                            <option value="2.0">2.0x Double</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group" style="display: flex; align-items: center; justify-content: space-between;">
+                    <div>
+                        <label class="form-label" style="margin-bottom: 2px;">Auto-Speak Responses</label>
+                        <small style="color: var(--text-muted); font-size: 0.78rem;">Read assistant messages aloud automatically</small>
+                    </div>
+                    <input type="checkbox" id="setting-voice-autospeak" style="width: 18px; height: 18px; accent-color: var(--accent-cyan); cursor: pointer;">
+                </div>
+
+                <div class="form-group" style="padding-top: 14px; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                    <div>
+                        <label class="form-label" style="margin-bottom: 2px;">Storage & History</label>
+                        <small style="color: var(--text-muted);">Permanently remove all conversations</small>
+                    </div>
+                    <button class="btn btn-sm" id="clear-all-history-btn" style="background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid #ef4444; padding: 8px 16px; border-radius: var(--radius-sm); cursor: pointer; font-weight: 600;">
+                        🗑️ Clear All Conversation History
+                    </button>
+                </div>
+            </div>
+            <div style="margin-top: 24px; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-sm" id="test-connection-btn" style="background: rgba(0, 242, 254, 0.12); color: var(--accent-cyan); border: 1px solid var(--accent-cyan); padding: 9px 16px; border-radius: var(--radius-sm); cursor: pointer; font-weight: 600;">
+                        ⚡ Test Connection
+                    </button>
+                    <button class="btn btn-sm" id="reset-settings-btn" style="background: transparent; color: var(--text-secondary); border: 1px solid var(--border-color); padding: 9px 14px; border-radius: var(--radius-sm); cursor: pointer;">
+                        Reset
+                    </button>
+                </div>
+                <button class="btn-primary-gradient" id="save-settings-btn" style="width: auto; padding: 10px 24px;">Save Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- HELP & SUPPORT MODAL -->
+    <div class="modal-backdrop" id="help-modal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 class="modal-title">❓ Help & Documentation</h3>
+                <button class="modal-close-btn" id="close-help-btn">×</button>
+            </div>
+            <div class="modal-body" style="line-height: 1.6; font-size: 0.92rem; color: var(--text-secondary);">
+                <h4 style="color: var(--text-primary); margin-bottom: 8px;">Keyboard Shortcuts</h4>
+                <ul style="margin-left: 20px; margin-bottom: 16px;">
+                    <li><strong>Enter</strong>: Send message</li>
+                    <li><strong>Shift + Enter</strong>: New line in input</li>
+                    <li><strong>Escape</strong>: Close open modal</li>
+                    <li><strong>Click 📎</strong>: Attach Image, PDF, Audio or Video</li>
+                    <li><strong>Click 🎤</strong>: Start voice transcription</li>
+                </ul>
+
+                <h4 style="color: var(--text-primary); margin-bottom: 8px;">3D Robot Assistant</h4>
+                <p style="margin-bottom: 16px;">
+                    The humanoid assistant rendered on the right reacts dynamically to your interactions: floating in <strong>Idle</strong>, nodding and pulsing in <strong>Speaking</strong>, tilting attentively in <strong>Listening</strong>, and orbiting holographic neon rings during <strong>Processing</strong>.
+                </p>
+
+                <h4 style="color: var(--text-primary); margin-bottom: 8px;">FastAPI Interactive Documentation</h4>
+                <p>
+                    Explore all REST APIs directly via Swagger at <a href="http://127.0.0.1:8000/docs" target="_blank" style="color: var(--accent-cyan);">http://127.0.0.1:8000/docs</a>.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MEDIA PREVIEW MODAL (IMAGE & VIDEO PREVIEW WITH DIRECT DOWNLOAD) -->
+    <div class="modal-backdrop" id="media-preview-modal">
+        <div class="modal-dialog" style="max-width: 820px; width: 92%;">
+            <div class="modal-header">
+                <h3 class="modal-title" id="preview-modal-title">🖼️ Media Preview</h3>
+                <button class="modal-close-btn" id="close-preview-modal-btn">×</button>
+            </div>
+            <div class="modal-body" style="text-align: center;">
+                <div id="preview-modal-media-content" style="max-height: 520px; overflow: hidden; display: flex; align-items: center; justify-content: center; background: #000; border-radius: var(--radius-md); margin-bottom: 16px;"></div>
+                <div id="preview-modal-meta" style="text-align: left; margin-bottom: 16px; font-size: 0.88rem; color: var(--text-secondary);"></div>
+            </div>
+            <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 12px; padding: 12px 24px; border-top: 1px solid var(--border-color);">
+                <button class="btn btn-sm" id="preview-modal-close-action" style="background: transparent; color: var(--text-secondary); border: 1px solid var(--border-color); padding: 8px 18px; border-radius: var(--radius-sm); cursor: pointer;">Close</button>
+                <button class="btn-primary-gradient" id="preview-modal-download-btn" style="width: auto; padding: 8px 24px;">📥 Download File</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container"></div>
+
+    <!-- JavaScript Application Modules -->
+    <script src="js/three.min.js?v=2.4"></script>
+    <script src="js/marked.min.js?v=2.4"></script>
+    <script src="js/highlight.min.js?v=2.4"></script>
+    <script src="js/robot.js?v=2.4"></script>
+    <script src="js/chat.js?v=2.4"></script>
+    <script src="js/multimodal.js?v=2.4"></script>
+    <script src="js/voice.js?v=2.4"></script>
+    <script src="js/image_studio.js?v=2.4"></script>
+    <script src="js/video_studio.js?v=2.4"></script>
+    <script src="js/gallery.js?v=2.4"></script>
+    <script src="js/reports.js?v=2.4"></script>
+    <script src="js/app.js?v=2.4"></script>
+</body>
+</html>
+
